@@ -14,3 +14,9 @@ variable "subnet_CIDR" {
   default     = []
 
 }
+
+variable "name_sg" {
+  type = string
+  description = "security group name "
+  default = "ssh y web"
+}
