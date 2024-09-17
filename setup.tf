@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_security_group" "pinFinalSG" {
   name = var.name_sg
-  vpc_id = z
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = 22
