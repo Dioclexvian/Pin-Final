@@ -20,3 +20,9 @@ variable "name_sg" {
   description = "security group name "
   default = "ssh y web"
 }
+
+variable "name_ec2" {
+  type = string
+  description = "instance name"
+  default = "Ubuntu-PinFinal"
+}
