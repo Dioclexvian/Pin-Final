@@ -36,3 +36,15 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
+    
+    - name: Save private key; pin.pem
+      run: |
+        echo "$(terraform output -raw private_key_pem)" > pin.pem
+        chmod 400 pin.pem
+    
+    - name: Upload key artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: key-pem
+        path: pin.pem    
+        # path: "*.pem"  #guardar varias llaves, files o directorio completo
