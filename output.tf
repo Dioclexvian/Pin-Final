@@ -5,5 +5,5 @@ output "IpPublica-UbuntuServerEC2" {
 output "private_key_pem" {
   description = "Llave privada .pem"
   value       = tls_private_key.ssh_key.private_key_pem
-  sensitive   = true
+  sensitive   = false
 }
