@@ -7,3 +7,6 @@ output "private_key_pem" {
   value       = tls_private_key.ssh_key.private_key_pem
   sensitive   = true
 }
+output "key_name" {
+  value = aws_instance.Ubuntu-PinFinal.key_name
+}
