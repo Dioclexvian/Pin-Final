@@ -5,7 +5,7 @@ resource "aws_instance" "Ubuntu-PinFinal" {
   key_name = aws_key_pair.deployer_key.key_name
   associate_public_ip_address = true 
   subnet_id = aws_subnet.subnets[0].id
-  user_data = "${file("instalacion-programas.sh")}"
+  user_data = "${file("instalacionProgramas.sh")}"
 
   tags = {
     Name = "server-Pin-Final"
