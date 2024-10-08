@@ -26,3 +26,31 @@ variable "name_ec2" {
   description = "instance name"
   default = "Ubuntu-PinFinal"
 }
+
+
+
+#variables EKS
+
+variable "cluster_name" {
+  default = "Eks-mundos-e"
+}
+
+variable "node_instance_type" {
+  default = "t3.small"
+}
+
+variable "desired_capacity" {
+  default = 3
+}
+
+variable "max_size" {
+  default = 3
+}
+
+variable "min_size" {
+  default = 1
+}
+
+# variable "ssh_key_name" {
+#   description = "Nombre de la llave SSH para acceder a los nodos"
+# }
