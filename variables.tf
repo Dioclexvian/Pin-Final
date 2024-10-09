@@ -36,7 +36,7 @@ variable "cluster_name" {
 }
 
 variable "node_instance_type" {
-  default = "t3.small"
+  default = "t1.micro"
 }
 
 variable "desired_capacity" {
