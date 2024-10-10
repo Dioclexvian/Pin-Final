@@ -48,8 +48,23 @@ resource "aws_security_group" "pinFinalSG" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
+    description = "conexión ssh"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+    ingress {
+    description = "https conexión "
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+    ingress {
+    description = "conexión eks"
+    from_port   = 10250
+    to_port     = 10250
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  
   }
