@@ -48,3 +48,15 @@ jobs:
         name: key-pem
         path: pin.pem    
         # path: "*.pem"  #guardar varias llaves, files o directorio completo
+    
+    - name: Save cluster private key; cluster-key.pem
+      run: |
+        echo "$(terraform output -raw cluster_private_key_pem)" > cluster-key.pem
+        chmod 400 cluster-key.pem
+      
+    - name: Upload cluster key artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: cluster-key-pem
+        path: cluster-key.pem
+      

@@ -14,14 +14,41 @@ resource "aws_vpc" "vpc" {
 #Creaciòn de las subnet
 #¿aquí las subnetes deberían estar en zonas a y b, diferentes?
 #creo que debemos separarlos
-resource "aws_subnet" "subnets" {
-  count      = 3
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = element(var.subnet_CIDR, count.index)
+# resource "aws_subnet" "subnets" {
+#   count      = 3
+#   vpc_id     = aws_vpc.vpc.id
+#   cidr_block = element(var.subnet_CIDR, count.index)
+#   tags = {
+#     Name = "${var.name}-sub-${count.index + 1}"
+#   }
+# }
+
+
+resource "aws_subnet" "subnet_public" {
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = element(var.subnet_CIDR,0)
   tags = {
-    Name = "${var.name}-sub-${count.index + 1}"
-  }
+    Name = "${var.name}-sub-1"
+  } 
 }
+
+resource "aws_subnet" "subnet_private1" {
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = element(var.subnet_CIDR,1)
+  tags = {
+    Name = "${var.name}-sub-2"
+  } 
+}
+
+
+resource "aws_subnet" "subnet_private2" {
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = element(var.subnet_CIDR,2)
+  tags = {
+    Name = "${var.name}-sub-3"
+  } 
+}
+
 
 #Internet GW Publica subnet publica
 resource "aws_internet_gateway" "igw" {
@@ -33,7 +60,6 @@ resource "aws_internet_gateway" "igw" {
 
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
-
   tags = {
     Name = "${var.name}-public-route-table"
   }
@@ -42,11 +68,11 @@ resource "aws_route_table" "public_route_table" {
 resource "aws_route" "public_route" {
   route_table_id         = aws_route_table.public_route_table.id
   destination_cidr_block = "0.0.0.0/0" #destino está bien así
-  gateway_id             = aws_internet_gateway.igw.id #este es el target?
+  gateway_id             = aws_internet_gateway.igw.id 
 }
 
 resource "aws_route_table_association" "public_route_table" {
-  subnet_id      = aws_subnet.subnets[0].id
+  subnet_id      = aws_subnet.subnet_public.id
   route_table_id = aws_route_table.public_route_table.id
 }
 
