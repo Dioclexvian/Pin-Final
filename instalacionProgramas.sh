@@ -17,7 +17,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --group-names <nombre-del-grupo-de-seguridad> --query "SecurityGroups[0].GroupId" --output text)
+SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --group-names PinFinal-SG --query "SecurityGroups[0].GroupId" --output text)
 
 echo "El ID del grupo de seguridad es: $SECURITY_GROUP_ID"
 
