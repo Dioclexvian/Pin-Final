@@ -55,6 +55,20 @@ resource "aws_security_group" "pinFinalSG" {
     cidr_blocks = ["0.0.0.0/0"]  
   }
   ingress {
+    description = "conexion http"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+    ingress {
+    description = "conexion http x2"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+  ingress {
     description = "conexion https"
     from_port   = 443
     to_port     = 443
@@ -72,6 +86,13 @@ resource "aws_security_group" "pinFinalSG" {
     description = "servicio web"
     from_port = 80
     to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+    egress  {
+    description = "servicio web x2"
+    from_port = 8080
+    to_port = 8080
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
