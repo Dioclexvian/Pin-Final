@@ -26,16 +26,16 @@ jobs:
         aws-region: us-east-1  
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init 
 
     - name: Terraform validate
       run: terraform validate
       
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -auto-approve -var="aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var="aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
     
     - name: Save private key; pin.pem
       run: |
