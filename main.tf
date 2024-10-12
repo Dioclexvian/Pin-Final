@@ -1,5 +1,5 @@
-variable "aws_access_key_id" {}
-variable "aws_secret_access_key" {}
+variable "aws-access-key-id" {}
+variable "aws-secret-access-key" {}
  
  resource "aws_instance" "Ubuntu-PinFinal" {
   ami           = "ami-0a0e5d9c7acc336f1"  
@@ -12,8 +12,8 @@ variable "aws_secret_access_key" {}
   user_data = <<-EOF
     #!/bin/bash
     # Exporta las claves como variables de entorno
-    export SECRET_KEY=${var.aws_access_key_id}
-    export ANOTHER_SECRET=${var.aws_secret_access_key} 
+    export SECRET_KEY=${var.aws-access-key-id}
+    export ANOTHER_SECRET=${var.aws-secret-access-key} 
     
     # Ejecuta el script de instalación
     $(cat ${file("instalacionProgramas.sh")})
