@@ -48,8 +48,37 @@ resource "aws_security_group" "pinFinalSG" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
+    description = "conexion ssh"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+  ingress {
+    description = "conexion http"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+    ingress {
+    description = "conexion http x2"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+  ingress {
+    description = "conexion https"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  
+  }
+  ingress {
+    description = "conexion eks"
+    from_port   = 10250
+    to_port     = 10250
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  
   }
@@ -58,6 +87,27 @@ resource "aws_security_group" "pinFinalSG" {
     from_port = 80
     to_port = 80
     protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+    egress  {
+    description = "servicio web x2"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress  {
+    description = "servicio web curl y eks cluster traffic"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "servicio web curl y eks cluster traffic"
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   # egress {

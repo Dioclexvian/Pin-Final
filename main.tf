@@ -5,6 +5,7 @@ resource "aws_instance" "Ubuntu-PinFinal" {
   key_name = aws_key_pair.deployer_key.key_name
   associate_public_ip_address = true 
   subnet_id = aws_subnet.subnet_public.id
+  # iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
   user_data = "${file("instalacionProgramas.sh")}"
 
   tags = {
