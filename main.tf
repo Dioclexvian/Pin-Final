@@ -4,7 +4,7 @@ resource "aws_instance" "Ubuntu-PinFinal" {
   vpc_security_group_ids = [aws_security_group.pinFinalSG.id]
   key_name = aws_key_pair.deployer_key.key_name
   associate_public_ip_address = true 
-  subnet_id = aws_subnet.subnet_public.id
+  subnet_id = aws_subnet.subnet_public1.id
   # iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
   user_data = "${file("instalacionProgramas.sh")}"
 

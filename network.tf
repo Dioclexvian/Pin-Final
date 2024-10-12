@@ -24,7 +24,7 @@ resource "aws_vpc" "vpc" {
 # }
 
 
-resource "aws_subnet" "subnet_public" {
+resource "aws_subnet" "subnet_public1" {
   vpc_id = aws_vpc.vpc.id
   cidr_block = element(var.subnet_CIDR,0)
   availability_zone = "us-east-1a"
@@ -55,6 +55,16 @@ resource "aws_subnet" "subnet_private2" {
   } 
 }
 
+resource "aws_subnet" "subnet_public2" {
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = element(var.subnet_CIDR,3)
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "${var.name}-sub-4"
+  } 
+}
+
 
 #Internet GW Publica subnet publica
 resource "aws_internet_gateway" "igw" {
@@ -77,10 +87,16 @@ resource "aws_route" "public_route" {
   gateway_id             = aws_internet_gateway.igw.id 
 }
 
-resource "aws_route_table_association" "public_route_table" {
-  subnet_id      = aws_subnet.subnet_public.id
+resource "aws_route_table_association" "public1_route_table" {
+  subnet_id      = aws_subnet.subnet_public1.id
   route_table_id = aws_route_table.public_route_table.id
 }
+
+resource "aws_route_table_association" "public2_route_table" {
+  subnet_id      = aws_subnet.subnet_public2.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
 
 
 
