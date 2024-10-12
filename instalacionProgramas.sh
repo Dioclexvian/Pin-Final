@@ -19,8 +19,8 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 echo "INSTALACIÓN DE KUBECTL CORRETA %%%%%%%%%"
 # aws configure  
 # aws sts get-caller-identity
-export AWS_ACCESS_KEY_ID="AKIA2CUNL3OUIC4M6GOR"
-export AWS_SECRET_ACCESS_KEY="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"
+export AWS_ACCESS_KEY_ID= $SECRET_KEY
+export AWS_SECRET_ACCESS_KEY= $ANOTHER_SECRET
 export AWS_DEFAULT_REGION="us-east-1"
 #dos subnets publicas
 #llamar ID securitygroup
