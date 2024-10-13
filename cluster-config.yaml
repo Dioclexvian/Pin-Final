@@ -6,7 +6,7 @@ metadata:
   region: us-east-1
 
 vpc:
-  id: "vpc-xxxxxx" # Reemplaza con el ID de tu VPC
+  id: $VPC_NAME # Reemplaza con el ID de tu VPC
   subnets:
     private:
       us-east-1a:
@@ -36,9 +36,7 @@ nodeGroups:
         autoScaler: true
         ebs: true
         efs: true
-        albIngress: true
         cloudWatch: true
-        fullECRAccess: true
         awsLoadBalancerController: true
 addons:
   - name: vpc-cni
