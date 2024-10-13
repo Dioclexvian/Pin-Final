@@ -27,7 +27,7 @@ nodeGroups:
   - name: ng-1
     instanceType: t3.micro
     desiredCapacity: 3
-    privateNetworking: true
+    privateNetworking: false
     ssh:
       allow: true
       publicKeyName: $KEY_NAME
