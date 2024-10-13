@@ -1,8 +1,8 @@
 #!bin/bash
 # aws configure  
 # aws sts get-caller-identity
-export AWS_ACCESS_KEY_ID="" 
-export AWS_SECRET_ACCESS_KEY="" 
+export AWS_ACCESS_KEY_ID="${SECRET_KEY}"
+export AWS_SECRET_ACCESS_KEY="${ANOTHER_SECRET}"
 export AWS_DEFAULT_REGION="us-east-1"
 #dos subnets publicas
 #llamar ID securitygroup

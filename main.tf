@@ -17,6 +17,11 @@ variable "aws-secret-access-key" {}
     
     # Ejecuta el script de instalación
     $(cat ${file("instalacionProgramas.sh")})
+
+    # Ejecuta el script para instalar EKS y crear el clúster
+    chmod +x ${file("eksInstall.sh")}
+    bash ${file("eksInstall.sh")}
+
   EOF
 
   tags = {
