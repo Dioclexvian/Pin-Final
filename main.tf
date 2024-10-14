@@ -9,7 +9,7 @@ resource "aws_instance" "EC2PinfinalG10" {
   ami           = "ami-0a0e5d9c7acc336f1"  
   instance_type = "t2.micro"
   subnet_id = data.aws_subnet.default[0].id
-  vpc_security_group_ids = [data.aws_security_group.default[0].id]
+  vpc_security_group_ids = [data.aws_security_group.specific.id]
   associate_public_ip_address = true
   key_name = aws_key_pair.deployer_key.key_name
     user_data = "${file("instalacionProgramas.sh")}"

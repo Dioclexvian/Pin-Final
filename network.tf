@@ -9,18 +9,19 @@ data "aws_subnet" "default" {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
-  filter {
-    name   = "default-for-az"
-    values = ["true"]
-  }
+
   # Selecciona la primera subred por defecto
   count = 1
 }
 
-data "aws_security_group" "default" {
+data "aws_security_group" "specific" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
+  }
+  filter {
+     name   = "group-name"
+     values = ["launch-wizard-3"]
   }
   # Selecciona el primer grupo de seguridad por defecto
   count = 1
