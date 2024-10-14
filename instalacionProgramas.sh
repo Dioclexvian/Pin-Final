@@ -1,8 +1,11 @@
 #!/bin/bash
 
 sudo apt update -y
-sudo apt install awscli -y
 sudo apt install curl -y
+sudo apt install unzip -y
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 sudo apt install docker.io -y
 sudo systemctl start docker
 sudo systemctl enable docker
@@ -16,4 +19,4 @@ sudo mv /tmp/eksctl /usr/local/bin
 echo "INSTALACIÓN DE EKSCTL CORRECTA"
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-echo "INSTALACIÓN DE KUBECTL CORRECTA %%%%%%%%%"
+echo "%%%%%%% INSTALACIÓN DE KUBECTL CORRECTA %%%%%%%%%"

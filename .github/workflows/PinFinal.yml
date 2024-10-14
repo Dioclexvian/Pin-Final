@@ -1,62 +1,62 @@
-# name: Instancia EC2 Terraform
+name: Instancia EC2 Terraform
 
-# on:
-#   push:
-#     branches:
-#       - main  
+on:
+  push:
+    branches:
+      - main  
 
-# jobs:
-#   terraform:
-#     runs-on: ubuntu-latest
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v2
-#       with:
-#         terraform_version: 1.9.5
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.9.5
 
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v3
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: us-east-1  
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1  
 
-#     - name: Terraform Init
-#       run: terraform init 
+    - name: Terraform Init
+      run: terraform init 
 
-#     - name: Terraform validate
-#       run: terraform validate
+    - name: Terraform validate
+      run: terraform validate
       
-#     - name: Terraform Plan
-#       run: terraform plan -var="aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+    - name: Terraform Plan
+      run: terraform plan 
 
-#     - name: Terraform Apply
-#       run: terraform apply -auto-approve -var="aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+    - name: Terraform Apply
+      run: terraform apply 
     
-#     - name: Save private key; pin.pem
-#       run: |
-#         echo "$(terraform output -raw private_key_pem)" > pin.pem
-#         chmod 400 pin.pem
+    - name: Save private key; pin.pem
+      run: |
+        echo "$(terraform output -raw private_key_pem)" > pin.pem
+        chmod 400 pin.pem
     
-#     - name: Upload key artifact
-#       uses: actions/upload-artifact@v3
-#       with:
-#         name: key-pem
-#         path: pin.pem    
-#         # path: "*.pem"  #guardar varias llaves, files o directorio completo
+    - name: Upload key artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: key-pem
+        path: pin.pem    
+        # path: "*.pem"  #guardar varias llaves, files o directorio completo
     
-#     - name: Save cluster private key; cluster-key.pem
-#       run: |
-#         echo "$(terraform output -raw cluster_private_key_pem)" > cluster-key.pem
-#         chmod 400 cluster-key.pem
+    - name: Save cluster private key; cluster-key.pem
+      run: |
+        echo "$(terraform output -raw cluster_private_key_pem)" > cluster-key.pem
+        chmod 400 cluster-key.pem
       
-#     - name: Upload cluster key artifact
-#       uses: actions/upload-artifact@v3
-#       with:
-#         name: cluster-key-pem
-#         path: cluster-key.pem
+    - name: Upload cluster key artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: cluster-key-pem
+        path: cluster-key.pem
       
