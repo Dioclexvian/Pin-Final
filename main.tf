@@ -72,7 +72,7 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count             = 3
   vpc_id            = aws_vpc.main.id
-  cidr_block        = ["10.0.1.0/23", "10.0.3.0/23", "10.0.5.0/23"][count.index]
+  cidr_block        = ["10.0.1.0/24", "10.0.3.0/24", "10.0.5.0/24"][count.index]
   availability_zone = ["us-east-1a", "us-east-1b", "us-east-1c"][count.index]
 
   tags = {
@@ -156,7 +156,7 @@ resource "aws_key_pair" "main" {
 
 # EC2 Instance
 resource "aws_instance" "Ubuntu-PinFinal" {
-  ami           = "ami-0a0e5d9c7acc336f1"  # Ubuntu 20.04 LTS in us-east-1
+  ami           = "ami-0261755bbcb8c4a84"  # Ubuntu 20.04 LTS in us-east-1
   instance_type = "t2.micro"
   key_name      = aws_key_pair.main.key_name
   subnet_id     = aws_subnet.public[0].id
