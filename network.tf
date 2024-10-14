@@ -4,14 +4,16 @@ data "aws_vpc" "default" {
   default = true
 }
 
-data "aws_subnet" "default" {
+data "aws_subnet" "specific_sb" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
+   filter {
+    name   = "subnet-id"
+    values = ["subnet-09c3743bb732f23bb"]  
+  }
 
-  # Selecciona la primera subred por defecto
-  count = 1
 }
 
 data "aws_security_group" "specific" {
