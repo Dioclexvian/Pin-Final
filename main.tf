@@ -59,7 +59,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_subnet" "public" {
   count                   = 3
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = ["10.0.0.0/23", "10.0.2.0/23", "10.0.4.0/23"][count.index]
+  cidr_block              = ["10.0.0.0/24", "10.0.2.0/24", "10.0.4.0/24"][count.index]
   availability_zone       = ["us-east-1a", "us-east-1b", "us-east-1c"][count.index]
   map_public_ip_on_launch = true
 
