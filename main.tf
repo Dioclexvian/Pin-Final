@@ -5,7 +5,7 @@ provider "aws" {
   region = "us-east-1"  # Cambia a la región que prefieras
 }
 
-resource "aws_instance" "EC2PinfinalG10" {
+resource "aws_instance" "EC2PinfinalG101" {
   ami           = "ami-0a0e5d9c7acc336f1"  
   instance_type = "t2.micro"
   subnet_id = data.aws_subnet.specific_sb.id
@@ -14,7 +14,7 @@ resource "aws_instance" "EC2PinfinalG10" {
   key_name = aws_key_pair.deployer_key.key_name
     user_data = "${file("instalacionProgramas.sh")}"
   tags = {
-    Name = "EC2PinfinalG10"
+    Name = "EC2PinfinalG101"
   }
 }
 

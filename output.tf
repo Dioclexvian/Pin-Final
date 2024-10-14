@@ -1,13 +1,13 @@
 output "IpPublica-UbuntuServerEC2" {
   description = "Public IP of EC2 instance"
-  value       = aws_instance.EC2PinfinalG10.public_ip
+  value       = aws_instance.EC2PinfinalG101.public_ip
 }
 
-# output "private_key_pem" {
-#   description = "Private key for SSH access"
-#   value       = tls_private_key.ssh_key.private_key_pem
-#   sensitive   = true
-# }
+output "private_key_pem" {
+  description = "Private key for SSH access"
+  value       = tls_private_key.ssh_key.private_key_pem
+  sensitive   = true
+}
 
 # output "key_name" {
 #   description = "Name of the key pair"
