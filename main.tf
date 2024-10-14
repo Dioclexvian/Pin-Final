@@ -1,6 +1,6 @@
 # variable "aws-access-key-id" {}
 # variable "aws-secret-access-key" {}
-
+ 
 #  resource "aws_instance" "Ubuntu-PinFinal" {
 #   ami           = "ami-0a0e5d9c7acc336f1"  
 #   instance_type = "t2.micro"
@@ -142,23 +142,23 @@ resource "aws_security_group" "main" {
   }
 }
 
+# Generate SSH key
 resource "tls_private_key" "ssh_key" {
-  count     = data.aws_key_pair.existing.key_name != "" ? 0 : 1
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
+# Key Pair
 resource "aws_key_pair" "main" {
-  count      = data.aws_key_pair.existing.key_name != "" ? 0 : 1
   key_name   = "MundosE-Grupo10-KeyPair"
-  public_key = tls_private_key.ssh_key[0].public_key_openssh
+  public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
 # EC2 Instance
 resource "aws_instance" "Ubuntu-PinFinal" {
   ami           = "ami-0261755bbcb8c4a84"  # Ubuntu 20.04 LTS in us-east-1
   instance_type = "t2.micro"
-  key_name      = data.aws_key_pair.existing.key_name != "" ? data.aws_key_pair.existing.key_name : aws_key_pair.main[0].key_name
+  key_name      = aws_key_pair.main.key_name
   subnet_id     = aws_subnet.public[0].id
   vpc_security_group_ids = [aws_security_group.main.id]
 
@@ -208,13 +208,4 @@ module "eks" {
   tags = {
     grupo = "grupo10"
   }
-}
-# Data source for existing KMS key
-data "aws_kms_alias" "eks" {
-  name = "alias/eks/eks-MundosE"
-}
-
-# Data source for existing CloudWatch log group
-data "aws_cloudwatch_log_group" "eks" {
-  name = "/aws/eks/eks-MundosE/cluster"
 }
