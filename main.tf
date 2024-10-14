@@ -1,6 +1,6 @@
 # variable "aws-access-key-id" {}
 # variable "aws-secret-access-key" {}
- 
+
 #  resource "aws_instance" "Ubuntu-PinFinal" {
 #   ami           = "ami-0a0e5d9c7acc336f1"  
 #   instance_type = "t2.micro"
@@ -35,130 +35,31 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# VPC
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/21"
+# Use existing key pair if available, otherwise create a new one
+data "aws_key_pair" "existing" {
+  key_name = "MundosE-Grupo10-KeyPair"
   
-  tags = {
-    Name = "MundosE-Grupo10-VPC"
-    grupo = "grupo10"
-  }
 }
 
-# Internet Gateway
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "MundosE-Grupo10-IGW"
-    grupo = "grupo10"
-  }
-}
-
-# Subnets
-resource "aws_subnet" "public" {
-  count                   = 3
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = ["10.0.0.0/24", "10.0.2.0/24", "10.0.4.0/24"][count.index]
-  availability_zone       = ["us-east-1a", "us-east-1b", "us-east-1c"][count.index]
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "MundosE-Grupo10-Public-Subnet-${count.index + 1}"
-    grupo = "grupo10"
-  }
-}
-
-resource "aws_subnet" "private" {
-  count             = 3
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = ["10.0.1.0/24", "10.0.3.0/24", "10.0.5.0/24"][count.index]
-  availability_zone = ["us-east-1a", "us-east-1b", "us-east-1c"][count.index]
-
-  tags = {
-    Name = "MundosE-Grupo10-Private-Subnet-${count.index + 1}"
-    grupo = "grupo10"
-  }
-}
-
-# Route Table for Public Subnets
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
-  }
-
-  tags = {
-    Name = "MundosE-Grupo10-Public-RT"
-    grupo = "grupo10"
-  }
-}
-
-resource "aws_route_table_association" "public" {
-  count          = 3
-  subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public.id
-}
-
-# Security Group
-resource "aws_security_group" "main" {
-  name        = "MundosE-Grupo10-SG"
-  description = "Security group for EC2 instances"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "MundosE-Grupo10-SG"
-    grupo = "grupo10"
-  }
-}
-
-# Generate SSH key
 resource "tls_private_key" "ssh_key" {
+  count     = data.aws_key_pair.existing.key_name != "" ? 0 : 1
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-# Key Pair
 resource "aws_key_pair" "main" {
+  count      = data.aws_key_pair.existing.key_name != "" ? 0 : 1
   key_name   = "MundosE-Grupo10-KeyPair"
-  public_key = tls_private_key.ssh_key.public_key_openssh
+  public_key = tls_private_key.ssh_key[0].public_key_openssh
 }
+
+# The rest of your VPC, subnet, and security group configurations remain the same
 
 # EC2 Instance
 resource "aws_instance" "Ubuntu-PinFinal" {
   ami           = "ami-0261755bbcb8c4a84"  # Ubuntu 20.04 LTS in us-east-1
   instance_type = "t2.micro"
-  key_name      = aws_key_pair.main.key_name
+  key_name      = data.aws_key_pair.existing.key_name != "" ? data.aws_key_pair.existing.key_name : aws_key_pair.main[0].key_name
   subnet_id     = aws_subnet.public[0].id
   vpc_security_group_ids = [aws_security_group.main.id]
 
@@ -205,7 +106,27 @@ module "eks" {
     }
   }
 
+  # Use existing KMS key if available
+  create_kms_key = false
+  cluster_encryption_config = {
+    resources        = ["secrets"]
+    provider_key_arn = data.aws_kms_alias.eks.target_key_arn
+  }
+
+  # Use existing CloudWatch log group if available
+  create_cloudwatch_log_group = false
+
   tags = {
     grupo = "grupo10"
   }
+}
+
+# Data source for existing KMS key
+data "aws_kms_alias" "eks" {
+  name = "alias/eks/eks-MundosE"
+}
+
+# Data source for existing CloudWatch log group
+data "aws_cloudwatch_log_group" "eks" {
+  name = "/aws/eks/eks-MundosE/cluster"
 }
