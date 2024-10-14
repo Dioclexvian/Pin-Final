@@ -1,5 +1,5 @@
-# variable "aws-access-key-id" {}
-# variable "aws-secret-access-key" {}
+variable "aws-access-key-id" {}
+variable "aws-secret-access-key" {}
  
 #  resource "aws_instance" "Ubuntu-PinFinal" {
 #   ami           = "ami-0a0e5d9c7acc336f1"  
@@ -142,15 +142,25 @@ resource "aws_security_group" "main" {
   }
 }
 
-# EC2 Instance
+# EC2 Instance MODIFICADOOOO
 resource "aws_instance" "main" {
-  ami           = "ami-0261755bbcb8c4a84"  # Ubuntu 20.04 LTS in us-east-1
+  ami           = "ami-0a0e5d9c7acc336f1" 
   instance_type = "t2.micro"
   key_name      = aws_key_pair.main.key_name
   subnet_id     = aws_subnet.public[0].id
   vpc_security_group_ids = [aws_security_group.main.id]
 
-  user_data = file("install-programs.sh")
+# iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
+  user_data = <<-EOF
+    #!/bin/bash
+    # Exporta las claves como variables de entorno
+    export SECRET_KEY=${var.aws-access-key-id}
+    export ANOTHER_SECRET=${var.aws-secret-access-key} 
+    
+    # Ejecuta el script de instalación
+    $(cat ${file("install-programs.sh")})
+
+  EOF
 
   tags = {
     Name = "MundosE-Grupo10-EC2"
