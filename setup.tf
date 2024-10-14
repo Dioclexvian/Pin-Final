@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 #key pem EC2
 
 resource "tls_private_key" "ssh_key" {
