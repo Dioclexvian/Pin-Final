@@ -166,22 +166,34 @@ resource "aws_key_pair" "main" {
 
 # EKS Cluster
 module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"  # Especificamos una versión reciente del módulo
+
   cluster_name    = "eks-MundosE"
   cluster_version = "1.27"
-  subnets         = aws_subnet.private[*].id
-  vpc_id          = aws_vpc.main.id
 
-  node_groups = {
+  vpc_id     = aws_vpc.main.id
+  subnet_ids = aws_subnet.private[*].id
+
+  eks_managed_node_group_defaults = {
+    ami_type       = "AL2_x86_64"
+    instance_types = ["t3.micro"]
+  }
+
+  eks_managed_node_groups = {
     eks_nodes = {
-      desired_capacity = 3
-      max_capacity     = 3
-      min_capacity     = 3
+      min_size     = 3
+      max_size     = 3
+      desired_size = 3
 
-      instance_type = "t3.micro"
-      key_name      = aws_key_pair.main.key_name
+      instance_types = ["t3.micro"]
+      capacity_type  = "ON_DEMAND"
 
-      additional_tags = {
+      labels = {
+        grupo = "grupo10"
+      }
+
+      tags = {
         grupo = "grupo10"
       }
     }
@@ -190,4 +202,20 @@ module "eks" {
   tags = {
     grupo = "grupo10"
   }
+}
+
+# Outputs
+output "ec2_public_ip" {
+  description = "Public IP of EC2 instance"
+  value       = aws_instance.main.public_ip
+}
+
+output "eks_cluster_endpoint" {
+  description = "Endpoint for EKS control plane"
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_cluster_security_group_id" {
+  description = "Security group ids attached to the cluster control plane"
+  value       = module.eks.cluster_security_group_id
 }
