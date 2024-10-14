@@ -1,5 +1,5 @@
-variable "aws-access-key-id" {}
-variable "aws-secret-access-key" {}
+# variable "aws-access-key-id" {}
+# variable "aws-secret-access-key" {}
  
 #  resource "aws_instance" "Ubuntu-PinFinal" {
 #   ami           = "ami-0a0e5d9c7acc336f1"  
@@ -150,17 +150,7 @@ resource "aws_instance" "main" {
   subnet_id     = aws_subnet.public[0].id
   vpc_security_group_ids = [aws_security_group.main.id]
 
-# iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
-  user_data = <<-EOF
-    #!/bin/bash
-    # Exporta las claves como variables de entorno
-    export SECRET_KEY=${var.aws-access-key-id}
-    export ANOTHER_SECRET=${var.aws-secret-access-key} 
-    
-    # Ejecuta el script de instalación
-    $(cat ${file("install-programs.sh")})
-
-  EOF
+  user_data = file("install-programs.sh")
 
   tags = {
     Name = "MundosE-Grupo10-EC2"
